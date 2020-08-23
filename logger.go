@@ -1,7 +1,9 @@
 package logger
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"path/filepath"
 	"runtime"
 	"time"
@@ -43,12 +45,16 @@ var levelColors = map[string]string{
 // Logger settings
 var loggerCfg cfg
 
+// bWriter - used to output logs to a file
+var bWriter *bufio.Writer
+
 /*
 cfg - a structure that stores the settings of the logging module
 */
 type cfg struct {
 	appName string // name of the program.
 	logPath string // path of the file for writing logs to it.
+	level   int    // logger's level: 0 - DEBUG, 1 - INFO, 2 - WARNING, 3 - ERROR, 4 - CRITICAL
 }
 
 /*
@@ -57,7 +63,11 @@ Debug - category of logs, used for debugging code.
 	text <string> - text of the log's message
 */
 func Debug(lc string, text string) {
-	fmt.Println(makeLogString("DEBUG", lc, text))
+	if loggerCfg.level > 0 {
+		return
+	}
+
+	logManage("DEBUG", lc, text)
 }
 
 /*
@@ -66,7 +76,11 @@ Info - the category of logs used for information messages in the algorithm.
 	text <string> - text of the log's message
 */
 func Info(lc string, text string) {
-	fmt.Println(makeLogString("INFO", lc, text))
+	if loggerCfg.level > 1 {
+		return
+	}
+
+	logManage("INFO", lc, text)
 }
 
 /*
@@ -75,7 +89,11 @@ Warning - the category of logs used to display warnings of the program logic.
 	text <string> - text of the log's message
 */
 func Warning(lc string, text string) {
-	fmt.Println(makeLogString("WARNING", lc, text))
+	if loggerCfg.level > 2 {
+		return
+	}
+
+	logManage("WARNING", lc, text)
 }
 
 /*
@@ -84,7 +102,11 @@ Error - a category of logs used to display errors in the program logic.
 	text <string> - text of the log's message
 */
 func Error(lc string, text string) {
-	fmt.Println(makeLogString("ERROR", lc, text))
+	if loggerCfg.level > 3 {
+		return
+	}
+
+	logManage("ERROR", lc, text)
 }
 
 /*
@@ -93,7 +115,21 @@ Critical - a category of logs used to display fatal errors in the event of which
 	text <string> - text of the log's message
 */
 func Critical(lc string, text string) {
-	fmt.Println(makeLogString("CRITICAL", lc, text))
+	if loggerCfg.level > 4 {
+		return
+	}
+
+	logManage("CRITICAL", lc, text)
+}
+
+func logManage(level string, lc string, text string) {
+	if bWriter == nil {
+		fmt.Println(makeLogString(level, lc, text))
+		return
+	}
+
+	fmt.Fprintf(bWriter, "%s\n", makeLogString(level, lc, text))
+	bWriter.Flush()
 }
 
 func makeLogString(level string, lc string, message string) string {
@@ -104,17 +140,40 @@ func makeLogString(level string, lc string, message string) string {
 }
 
 func getLogPosition() string {
-	_, file, line, _ := runtime.Caller(3)
+	_, file, line, _ := runtime.Caller(4)
 
 	return fmt.Sprint(filepath.Base(file), ":", line)
 }
 
 /*
 SetConfig - configures the logging module for further work.
-	appName - name of the program.
-	logPath - path of the file for writing logs to it. If the variable is empty, then logs are not written to the file.
+	appName <string> - name of the program.
+	logPath <string> - path of the file for writing logs to it. If the variable is empty, then logs are not written to the file.
+	level <int> - logger's level: 0 - DEBUG, 1 - INFO, 2 - WARNING, 3 - ERROR, 4 - CRITICAL
 */
-func SetConfig(appName string, logPath string) {
+func SetConfig(appName string, logPath string, level int) {
 	loggerCfg.appName = appName
 	loggerCfg.logPath = logPath
+	loggerCfg.level = level
+
+	checkConfig()
+}
+
+func checkConfig() {
+	if len(loggerCfg.appName) < 1 {
+		loggerCfg.appName = "APP"
+	}
+
+	if loggerCfg.level < 0 || loggerCfg.level > 4 {
+		loggerCfg.level = 0
+	}
+
+	if len(loggerCfg.logPath) > 0 {
+		logs, err := os.OpenFile(loggerCfg.logPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		if err != nil {
+			return
+		}
+
+		bWriter = bufio.NewWriter(logs)
+	}
 }
