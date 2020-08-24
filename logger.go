@@ -68,7 +68,7 @@ Debug - category of logs, used for debugging code.
 
 - text <string> - text of the log's message
 */
-func Debug(lc string, text string) {
+func Debug(lc, text string) {
 	if loggerCfg.level > 0 {
 		return
 	}
@@ -83,7 +83,7 @@ Info - the category of logs used for information messages in the algorithm.
 
 - text <string> - text of the log's message
 */
-func Info(lc string, text string) {
+func Info(lc, text string) {
 	if loggerCfg.level > 1 {
 		return
 	}
@@ -98,7 +98,7 @@ Warning - the category of logs used to display warnings of the program logic.
 
 - text <string> - text of the log's message
 */
-func Warning(lc string, text string) {
+func Warning(lc, text string) {
 	if loggerCfg.level > 2 {
 		return
 	}
@@ -113,7 +113,7 @@ Error - a category of logs used to display errors in the program logic.
 
 - text <string> - text of the log's message
 */
-func Error(lc string, text string) {
+func Error(lc, text string) {
 	if loggerCfg.level > 3 {
 		return
 	}
@@ -128,7 +128,7 @@ Critical - a category of logs used to display fatal errors in the event of which
 
 - text <string> - text of the log's message
 */
-func Critical(lc string, text string) {
+func Critical(lc, text string) {
 	if loggerCfg.level > 4 {
 		return
 	}
@@ -145,7 +145,7 @@ logManage - used to manage the display of logs.
 
 - text <string> - text of error
 */
-func logManage(level string, lc string, text string) {
+func logManage(level, lc, text string) {
 	if bWriter == nil {
 		fmt.Println(makeLogString(level, lc, text))
 		return
@@ -165,7 +165,7 @@ makeLogString - used to create a formatted log string.
 - text <string> - text of error
 
 */
-func makeLogString(level string, lc string, text string) string {
+func makeLogString(level, lc, text string) string {
 	now := time.Now().Format(timeFormat)
 	logPos := getLogPosition()
 	return fmt.Sprint(levelColors[level],
@@ -191,7 +191,7 @@ If the variable is empty, then logs are not written to the file.
 
 - level <int> - logger's level: 0 - DEBUG, 1 - INFO, 2 - WARNING, 3 - ERROR, 4 - CRITICAL
 */
-func SetConfig(appName string, logPath string, level int) {
+func SetConfig(appName, logPath string, level int) {
 	loggerCfg.appName = appName
 	loggerCfg.logPath = logPath
 	loggerCfg.level = level
