@@ -43,7 +43,7 @@ var levelColors = map[string]string{
 	"INFO":     fgGreen,
 	"WARNING":  fgYellow,
 	"ERROR":    fgRed,
-	"CRITICAL": fgPurple,
+	"CRITICAL": fgBoldRed,
 }
 
 // Logger settings
@@ -154,7 +154,7 @@ InfoJ - category of JSON logs, used for debugging code.
 - text <string> - text of the log's message
 */
 func InfoJ(lc, text string) {
-	if loggerCfg.Level > 0 {
+	if loggerCfg.Level > 1 {
 		return
 	}
 
@@ -184,7 +184,7 @@ WarningJ - category of JSON logs, used for debugging code.
 - text <string> - text of the log's message
 */
 func WarningJ(lc, text string) {
-	if loggerCfg.Level > 0 {
+	if loggerCfg.Level > 2 {
 		return
 	}
 
@@ -214,7 +214,7 @@ ErrorJ - category of JSON logs, used for debugging code.
 - text <string> - text of the log's message
 */
 func ErrorJ(lc, text string) {
-	if loggerCfg.Level > 0 {
+	if loggerCfg.Level > 3 {
 		return
 	}
 
@@ -244,7 +244,7 @@ CriticalJ - category of JSON logs, used for debugging code.
 - text <string> - text of the log's message
 */
 func CriticalJ(lc, text string) {
-	if loggerCfg.Level > 0 {
+	if loggerCfg.Level > 4 {
 		return
 	}
 
@@ -302,7 +302,7 @@ func makeLogString(level, lc, text string) string {
 	now := time.Now().Format(timeFormat)
 	logPos := getLogPosition()
 	return fmt.Sprint(levelColors[level],
-		"[", loggerCfg.AppName, "]", "[", now, "]", "[", lc, "]", "[", logPos, "]", "[", level, "]  ▶  ", text)
+		"[", loggerCfg.AppName, "]", "[", now, "]", "[", lc, "]", "[", logPos, "]", "[", level, "]  ▶  ", text, fgNormal)
 }
 
 /*
@@ -333,7 +333,7 @@ func makeLogJSONString(level, lc, text string) string {
 		return ""
 	}
 
-	return fmt.Sprint(levelColors[level], string(bLog))
+	return fmt.Sprint(levelColors[level], string(bLog), fgNormal)
 }
 
 /*
