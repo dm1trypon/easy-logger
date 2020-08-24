@@ -93,7 +93,7 @@ JSONLog - structure of a log message in JSON format
 */
 type JSONLog struct {
 	AppName string `json:"app_name"`
-	Time    string `json:"date"`
+	Dttm    string `json:"dttm"`
 	LC      string `json:"lc"`
 	File    string `json:"file"`
 	Line    int    `json:"line"`
@@ -320,7 +320,7 @@ func makeLogJSONString(level, lc, text string) string {
 
 	JSONLog := JSONLog{
 		AppName: loggerCfg.AppName,
-		Time:    time.Now().Format(timeFormat),
+		Dttm:    time.Now().Format(timeFormat),
 		LC:      lc,
 		File:    logPos[0],
 		Line:    line,
