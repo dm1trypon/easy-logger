@@ -79,7 +79,7 @@ JSONLog - structure of a log message in JSON format
 
 		- AppName <string> - name of the program.
 
-		- Time <string> - log's time.
+		- Dttm <string> - log's date and time.
 
 		- LC <string> - logging category
 
@@ -301,8 +301,14 @@ makeLogString - used to create a formatted log string.
 func makeLogString(level, lc, text string) string {
 	now := time.Now().Format(timeFormat)
 	logPos := getLogPosition()
-	return fmt.Sprint(levelColors[level],
-		"[", loggerCfg.AppName, "]", "[", now, "]", "[", lc, "]", "[", logPos, "]", "[", level, "]  ▶  ", text, fgNormal)
+
+	strLog := fmt.Sprint("[", loggerCfg.AppName, "]", "[", now, "]", "[", lc, "]", "[", logPos, "]", "[", level, "]  ▶  ", text)
+
+	if bWriter == nil {
+		return fmt.Sprint(levelColors[level], strLog, fgNormal)
+	}
+
+	return fmt.Sprint(strLog)
 }
 
 /*
@@ -333,7 +339,11 @@ func makeLogJSONString(level, lc, text string) string {
 		return ""
 	}
 
-	return fmt.Sprint(levelColors[level], string(bLog), fgNormal)
+	if bWriter == nil {
+		return fmt.Sprint(levelColors[level], string(bLog), fgNormal)
+	}
+
+	return fmt.Sprint(string(bLog))
 }
 
 /*
