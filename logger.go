@@ -147,7 +147,7 @@ func Info(lc, text string) {
 }
 
 /*
-InfoJ - category of JSON logs, used for debugging code.
+InfoJ - the category of JSON logs used for information messages in the algorithm.
 
 - lc <string> - logging category
 
@@ -177,7 +177,7 @@ func Warning(lc, text string) {
 }
 
 /*
-WarningJ - category of JSON logs, used for debugging code.
+WarningJ - the category of JSON logs used to display warnings of the program logic.
 
 - lc <string> - logging category
 
@@ -207,7 +207,7 @@ func Error(lc, text string) {
 }
 
 /*
-ErrorJ - category of JSON logs, used for debugging code.
+ErrorJ - a category of JSON logs used to display errors in the program logic.
 
 - lc <string> - logging category
 
@@ -237,7 +237,7 @@ func Critical(lc, text string) {
 }
 
 /*
-CriticalJ - category of JSON logs, used for debugging code.
+CriticalJ - a category of JSON logs used to display fatal errors in the event of which the program terminates.
 
 - lc <string> - logging category
 
