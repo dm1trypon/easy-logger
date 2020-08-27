@@ -30,7 +30,7 @@ Just a Logger written in Go
 
     `Info` - the category of logs used for information messages in the algorithm.
 
-4) #### InfoJ
+4) #### func InfoJ
 
     `func InfoJ(lc , text string)`
 
@@ -77,8 +77,8 @@ Just a Logger written in Go
     `func SetConfig(lc , text string)`
 
     `SetConfig` - configures the logging module for further work.
-    - config Cfg - contains:
+    - `config Cfg` - contains:
 		- appName <string> - name of the program.
 		- logPath <string> - path of the file for writing logs to it.
 		If the variable is empty, then logs are not written to the file.
-		- level <int> - logger's level: 0 - DEBUG, 1 - INFO, 2 - WARNING, 3 - ERROR, 4 - CRITICAL
+		- level <int> - logger's level: 0 - `DEBUG`, 1 - `INFO`, 2 - `WARNING`, 3 - `ERROR`, 4 - `CRITICAL`
