@@ -380,6 +380,10 @@ func checkConfig() {
 	}
 
 	if len(loggerCfg.LogPath) > 0 {
+		if err := os.MkdirAll(filepath.Base(loggerCfg.LogPath), os.ModePerm); err != nil {
+			return
+		}
+
 		logs, err := os.OpenFile(loggerCfg.LogPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if err != nil {
 			return
