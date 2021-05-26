@@ -380,7 +380,7 @@ func checkConfig() {
 	}
 
 	if len(loggerCfg.LogPath) > 0 {
-		if err := os.MkdirAll(filepath.Base(loggerCfg.LogPath), os.ModePerm); err != nil {
+		if err := os.MkdirAll(filepath.Dir(loggerCfg.LogPath), os.ModePerm); err != nil {
 			return
 		}
 
